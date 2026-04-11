@@ -30,6 +30,10 @@ Currently I am interning at **ByteDance Doubao Team**. Previously, I worked at V
 
 # Selected Publications
 
+- **MoDA: Mixture-of-Depths Attention** <br>
+    Lianghui Zhu, Yuxin Fang, Bencheng Liao, Shijie Wang, Tianheng Cheng, Zilong Huang, Chen Chen, Lai Wei, Yutao Zeng, Ya Wang, Yi Lin, Yu Li, Xinggang Wang <br>
+    **arXiv 2026** · [Paper](https://arxiv.org/abs/2603.15619) & [Code](https://github.com/hustvl/MoDA)
+
 - **Vision Mamba: Efficient Visual Representation Learning with Bidirectional State Space Model** <br>
     Lianghui Zhu\*, Bencheng Liao\*, Qian Zhang, Xinlong Wang, Wenyu Liu, Xinggang Wang <br>
     **ICML 2024** [Most Influential Paper](https://resources.paperdigest.org/2024/09/most-influential-icml-papers-2024-09/) (Rank 2nd, Citation 1st) · 3144 citations · 3.8k GitHub stars · [Paper](https://arxiv.org/abs/2401.09417) & [Code](https://github.com/hustvl/Vim)

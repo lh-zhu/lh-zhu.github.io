@@ -110,6 +110,28 @@ img {
   max-width: 100%;
 }
 
+.post .entry img {
+  display: block;
+  margin: 0 auto;
+}
+
+.post .entry figure {
+  text-align: center;
+  margin: 1.5em 0;
+
+  img {
+    display: block;
+    margin: 0 auto;
+  }
+
+  figcaption {
+    margin-top: 8px;
+    font-size: 14px;
+    color: $gray;
+    font-style: italic;
+  }
+}
+
 // Fixes images in popup boxes from Google Translate
 .gmnoprint img {
   max-width: none;

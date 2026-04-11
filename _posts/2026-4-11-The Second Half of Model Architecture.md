@@ -20,7 +20,10 @@ To see what the first half of model architecture got right, look at what scaled 
 
 Start with sequence length. Early Transformers handled hundreds of tokens. Getting to 128K+ required sustained creativity across multiple fronts: new attention patterns (sparse, linear, hybrid), systems engineering ([FlashAttention](https://arxiv.org/abs/2205.14135)), position encoding advances (RoPE scaling). An entire ecosystem of researchers and engineers, continuously improving how tokens communicate with each other. And the payoff went far beyond longer documents. Without this investment, the extended reasoning chains behind [O1](https://openai.com/index/learning-to-reason-with-llms/) and [R1](https://arxiv.org/abs/2501.12948) would be far more costly. That is what happens when you invest in how information *flows* along the sequence dimension.
 
-![Scaling in the first half](/images/blogs/the_second_half_of_model_architecture/scaling_first_half_v1p0.png)
+<figure>
+  <img src="/images/blogs/the_second_half_of_model_architecture/scaling_first_half_v1p0.png" alt="Scaling in the first half">
+  <figcaption>Parameters and data scale in modern LLMs</figcaption>
+</figure>
 
 Parameters and data were the intuitive part. Since the earliest days of deep learning, every textbook teaches us the same recipe: more data, wider layers, deeper networks, better representations. From GPT-2's 1.5B to today's hundreds of billions, the recipe worked. No new mechanisms needed. Just more of the same.
 

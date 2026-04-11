@@ -22,6 +22,12 @@ Currently I am interning at **ByteDance Doubao Team**. Previously, I worked at V
 - **B.Eng.** in Information Engineering, HUST, Sep. 2016 – Jun. 2021 (Ranking: 4/28 in Key Class)
 
 
+# Latest Posts
+
+- **[The Second Half of Model Architecture](/The-Second-Half-of-Model-Architecture/)** (Apr 2026) <br>
+  *We spent a decade scaling computation inside layers. We forgot to scale communication between them. That's about to change.*
+
+
 # Selected Publications
 
 - **Vision Mamba: Efficient Visual Representation Learning with Bidirectional State Space Model** <br>

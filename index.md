@@ -26,7 +26,7 @@ Currently I am interning at **ByteDance Doubao Team**. Previously, I worked at V
 
 - **Vision Mamba: Efficient Visual Representation Learning with Bidirectional State Space Model** <br>
     Lianghui Zhu\*, Bencheng Liao\*, Qian Zhang, Xinlong Wang, Wenyu Liu, Xinggang Wang <br>
-    **ICML 2024** Most Influential Paper (Rank 2nd, Citation 1st) · 3144 citations · 3.8k GitHub stars
+    **ICML 2024** [Most Influential Paper](https://resources.paperdigest.org/2024/09/most-influential-icml-papers-2024-09/) (Rank 2nd, Citation 1st) · 3144 citations · 3.8k GitHub stars
 
 - **JudgeLM: Fine-tuned Large Language Models are Scalable Judges** <br>
     Lianghui Zhu, Xinggang Wang, Xinlong Wang <br>
@@ -34,7 +34,7 @@ Currently I am interning at **ByteDance Doubao Team**. Previously, I worked at V
 
 - **LENS: Learning to Segment Anything with Unified Reinforced Reasoning** <br>
     Lianghui Zhu\*, Bin Ouyang\*, Yuxuan Zhang, Tianheng Cheng, Rui Hu, Haocheng Shen, Longjin Ran, Xiaoxin Chen, Li Yu, Wenyu Liu, Xinggang Wang <br>
-    **AAAI 2026 Oral**
+    **AAAI 2026 Oral** (Top 3.5%)
 
 - **DiG: Scalable and Efficient Diffusion Models with Gated Linear Attention** <br>
     Lianghui Zhu, Zilong Huang, Bencheng Liao, Jun Hao Liew, Hanshu Yan, Jiashi Feng, Xinggang Wang <br>

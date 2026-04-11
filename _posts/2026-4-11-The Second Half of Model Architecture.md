@@ -29,7 +29,7 @@ Parameters and data were the intuitive part. Since the earliest days of deep lea
 
 Except *wider* and *deeper* are not the same. Width scales naturally: GPUs love wide matrix multiplications, attention heads evolved to be more efficient, and wider hidden states fit seamlessly into existing architectures.
 
-Depth tells a different story. Models did get deeper: 32 layers, 64, even 100+. But the mechanism for how layers communicate, `x + F(x)`, remains essentially the same primitive [ResNet](https://arxiv.org/abs/1512.03385) introduced in 2015. There has been innovation around it (norm placement, residual scaling, cross-layer connectivity), but none displaced the `+` as the mainstream interface.
+Depth tells a different story. Models did get deeper: 32 layers, 64, even 100+. But the mechanism for how layers communicate, `x + F(x)`, remains essentially the same primitive [ResNet](https://arxiv.org/abs/1512.03385) introduced in 2015. There has been innovation around it (norm placement, residual scaling, cross-layer connectivity), but none displaced the "+" as the mainstream interface.
 
 The residual connection is arguably the single most important primitive in deep learning. Without it, no 100-layer Transformers, no modern LLMs, no scaling laws. But here is the thing about foundational solutions: sometimes they become so invisible that nobody questions whether they are still the right answer, or just the first one that worked.
 
@@ -91,6 +91,6 @@ Return to the telephone game. In the residual version, person 152 strains to hea
 
 Depth is the most glaring case because the gap between what exists (additive accumulation) and what is possible (selective retrieval) is enormous. And I believe the principle generalizes. Wherever neural networks use static, data-independent channels to move information, between layers, between modalities, between time steps, there is likely a retrieval mechanism waiting to replace the accumulation.
 
-We spent a decade mastering how tokens talk to each other. Now it is time to master how layers talk to each other, and eventually, how every component in a neural network talks to every other. The `+` had a great run. But it is time to upgrade the staircase.
+We spent a decade mastering how tokens talk to each other. Now it is time to master how layers talk to each other, and eventually, how every component in a neural network talks to every other. The "+" had a great run. But it is time to upgrade the staircase.
 
 Welcome to the second half of model architecture.

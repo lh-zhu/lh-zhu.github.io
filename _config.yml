@@ -36,9 +36,16 @@ footer-links:
   googleplus: # anything in your profile username that comes after plus.google.com/
 
 
-# Enter your Disqus shortname (not your username) to enable commenting on posts
-# You can find your shortname on the Settings page of your Disqus account
-disqus: https-lh-zhu-github-io-blog
+# Disqus (disabled, replaced by Giscus)
+# disqus: https-lh-zhu-github-io-blog
+
+# Giscus commenting system (based on GitHub Discussions)
+# repo_id and category_id: get yours at https://giscus.app/
+giscus:
+  repo: "lh-zhu/lh-zhu.github.io"
+  repo_id: "R_kgDOR_w4EA"
+  category: "Announcements"
+  category_id: "DIC_kwDOR_w4EM4C6nL1"
 
 # Enter your Google Analytics web tracking code (e.g. UA-2110908-2) to activate tracking
 google_analytics: G-NXZ86DZP8K

@@ -4,7 +4,7 @@ title: About
 permalink: /index.html
 ---
 
-<img style="float:right; padding-left:10px" src="images/self.jpeg" width="220" height="220">
+<img style="float:right; padding-left:10px" src="https://avatars.githubusercontent.com/u/27504120?s=400&u=4dae5e64d5ff15abef1ce9ce02eb739d0bd5654f&v=4" width="220" height="220">
 
 I am a Ph.D. candidate at [Huazhong University of Science and Technology (HUST)](https://english.hust.edu.cn/), School of Electronic Information and Communications, supervised by Prof. [Xinggang Wang](https://xwcv.github.io/) and Prof. Wenyu Liu.
 

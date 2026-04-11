@@ -6,13 +6,13 @@ permalink: /index.html
 
 <img style="float:right; padding-left:10px" src="https://avatars.githubusercontent.com/u/27504120?s=400&u=4dae5e64d5ff15abef1ce9ce02eb739d0bd5654f&v=4" width="220" height="220">
 
-I am a Ph.D. candidate at [Huazhong University of Science and Technology (HUST)](https://english.hust.edu.cn/), School of Electronic Information and Communications, supervised by Prof. [Xinggang Wang](https://xwcv.github.io/) and Prof. Wenyu Liu.
+I am a Ph.D. candidate at [Huazhong University of Science and Technology (HUST)](https://english.hust.edu.cn/), School of Electronic Information and Communications, supervised by Prof. [Xinggang Wang](https://xwcv.github.io/) and Prof. [Wenyu Liu](https://eic.hust.edu.cn/professor/liuwenyu/).
 
 My research interests include **LLM**, **foundation models**, and **visual representation learning**.
 
-Currently I am interning at **ByteDance Doubao Team**. Previously, I worked at Vivo AI Laboratory, ByteDance (Doubao Vision Group, mentored by Dr. Jiashi Feng & Dr. Zilong Huang), and [Beijing Academy of Artificial Intelligence (BAAI)](https://www.baai.ac.cn/) (mentored by Dr. Xinlong Wang).
+Currently I am interning at **ByteDance Doubao Team**. Previously, I worked at Vivo AI Laboratory, ByteDance (Doubao Vision Group, mentored by Dr. [Jiashi Feng](https://sites.google.com/site/jshfeng/home) & Dr. [Zilong Huang](https://speedinghzl.github.io/)), and [Beijing Academy of Artificial Intelligence (BAAI)](https://www.baai.ac.cn/) (mentored by Dr. [Xinlong Wang](https://www.xloong.wang/)).
 
-\[[Email](mailto:lhzh@hust.edu.cn)\] \[[GitHub](https://github.com/unrealluver)\]
+\[[Email](mailto:lhzh@hust.edu.cn)\] \[[GitHub](https://github.com/lh-zhu)\]
 
 
 # Education

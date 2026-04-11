@@ -73,8 +73,8 @@ Currently I am interning at **ByteDance Doubao Team**. Previously, I worked at V
 
 # Awards & Honors
 
-- NSFC Basic Research Program for Young Students (Ph.D. Candidates), 2025
-- CAST Young Talent Support Project Special Program for Doctoral Students, 2025
+- **Basic Research Program for Young Students** (Ph.D. Candidates), NSFC, China, 2025
+- **Young Talent Support Project Special Program** for Doctoral Students, CAST, China, 2025
 - **National Scholarships**, Ministry of Education, China, 2024 & 2025
 - **Academic Rising Star**, HUST (rank 1st, only 10 in the whole school), 2025
 - Science, Technology and Innovation Scholarship, Ministry of Education, China, 2025

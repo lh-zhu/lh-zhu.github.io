@@ -12,7 +12,7 @@ My research interests include **LLM**, **foundation models**, and **visual repre
 
 Currently I am interning at **ByteDance Doubao Team**. Previously, I worked at Vivo AI Laboratory, ByteDance (Doubao Vision Group, mentored by Dr. [Jiashi Feng](https://scholar.google.com/citations?user=Q8iay0gAAAAJ&hl=zh-CN&oi=ao) & Dr. [Zilong Huang](https://speedinghzl.github.io/)), and [Beijing Academy of Artificial Intelligence (BAAI)](https://www.baai.ac.cn/) (mentored by Dr. [Xinlong Wang](https://www.xloong.wang/)).
 
-\[[Email](mailto:lhzh@hust.edu.cn)\] \[[GitHub](https://github.com/lh-zhu)\]
+\[[Email](mailto:lhzh@hust.edu.cn)\] \[[GitHub](https://github.com/lh-zhu)\] \[[Blog](/blog)\] \[[Google Scholar](https://scholar.google.com/citations?user=NvMHcs0AAAAJ)\] \[[X](https://x.com/lianghui_zhu)\]
 
 
 # Education

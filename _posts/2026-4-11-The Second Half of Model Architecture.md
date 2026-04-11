@@ -20,6 +20,8 @@ To see what the first half of model architecture got right, look at what scaled 
 
 Start with sequence length. Early Transformers handled hundreds of tokens. Getting to 128K+ required sustained creativity across multiple fronts: new attention patterns (sparse, linear, hybrid), systems engineering ([FlashAttention](https://arxiv.org/abs/2205.14135)), position encoding advances (RoPE scaling). An entire ecosystem of researchers and engineers, continuously improving how tokens communicate with each other. And the payoff went far beyond longer documents. Without this investment, the extended reasoning chains behind [O1](https://openai.com/index/learning-to-reason-with-llms/) and [R1](https://arxiv.org/abs/2501.12948) would be far more costly. That is what happens when you invest in how information *flows* along the sequence dimension.
 
+![Scaling in the first half](/images/blogs/the_second_half_of_model_architecture/scaling_first_half_v1p0.png)
+
 Parameters and data were the intuitive part. Since the earliest days of deep learning, every textbook teaches us the same recipe: more data, wider layers, deeper networks, better representations. From GPT-2's 1.5B to today's hundreds of billions, the recipe worked. No new mechanisms needed. Just more of the same.
 
 Except *wider* and *deeper* are not the same. Width scales naturally: GPUs love wide matrix multiplications, attention heads evolved to be more efficient, and wider hidden states fit seamlessly into existing architectures.
@@ -66,9 +68,13 @@ Once you see inter-layer communication as retrieval rather than accumulation, th
 
 But concept and practice are different things. I will be honest: the first time I ran depth attention with a naive implementation, the forward-backward pass took 44,924 ms. The idea was sound; the engineering reality was brutal. Modern GPUs are optimized for large, regular matrix multiplications, not thousands of tiny attention operations across depth. An algorithm that is cheap to compute can still be painfully slow to run.
 
+![Flash Depth Attention benchmark](/images/blogs/the_second_half_of_model_architecture/fda_v1p0.png)
+
 Previous methods hit an impasse: simplify depth attention for speed (losing the selective retrieval that made it worthwhile), or keep full expressivity at impractical cost. We found a way through by not simplifying the algorithm, but reorganizing the computation to fit GPU hardware. [Flash Depth Attention](https://github.com/hustvl/MoDA) made full-expressivity depth retrieval fast enough to train at scale.
 
 With efficient depth retrieval in hand, we noticed that the main pipeline of each layer had become: depth attention, sequence attention, depth attention, FFN. Three attention operations over different KV sets, sharing the same query. The natural move was to fuse them. [Mixture-of-depths attention (MoDA)](https://arxiv.org/abs/2603.15619) merges depth and sequence retrieval into one unified softmax. Each head jointly attends to the current layer's sequence KV pairs and depth KV pairs from all preceding layers. Under one softmax, the model freely decides when to look across sequence tokens and when to look across layers. One operation, two dimensions of retrieval.
+
+![Comparison of block designs](/images/blogs/the_second_half_of_model_architecture/comparison_blocks_v2p0.png)
 
 Return to the telephone game. In the residual version, person 152 strains to hear person 3 through a chorus of accumulated voices. With depth retrieval, person 152 taps person 3 on the shoulder and asks directly: "What did you say?" No intermediaries. No accumulated noise. And the results confirmed what the analogy predicts: given the ability to selectively retrieve from specific layers, the model consistently and actively chooses to do so. The attention sink phenomenon, where models dump probability mass onto a few fixed tokens, diminishes. This is what happens when you invest in how information flows *between* layers, not just *within* them.
 

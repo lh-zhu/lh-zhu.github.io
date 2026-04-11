@@ -10,7 +10,7 @@ I am a Ph.D. candidate at [Huazhong University of Science and Technology (HUST)]
 
 My research interests include **foundation models**, and **visual representation learning**.
 
-Currently I am interning at **ByteDance Doubao Team**. Previously, I worked at Vivo AI Laboratory, ByteDance Doubao Vision Group, mentored by Dr. [Jiashi Feng](https://scholar.google.com/citations?user=Q8iay0gAAAAJ&hl=zh-CN&oi=ao) & Dr. [Zilong Huang](https://speedinghzl.github.io/), and [Beijing Academy of Artificial Intelligence](https://www.baai.ac.cn/) (mentored by Dr. [Xinlong Wang](https://www.xloong.wang/)).
+Currently I am interning at **ByteDance Doubao Team**. Previously, I worked at Vivo AI Laboratory, ByteDance Doubao Vision Group (mentored by Dr. [Jiashi Feng](https://scholar.google.com/citations?user=Q8iay0gAAAAJ&hl=zh-CN&oi=ao) & Dr. [Zilong Huang](https://speedinghzl.github.io/)), and [Beijing Academy of Artificial Intelligence](https://www.baai.ac.cn/) (mentored by Dr. [Xinlong Wang](https://www.xloong.wang/)).
 
 \[[Email](mailto:lhzh@hust.edu.cn)\] \[[GitHub](https://github.com/lh-zhu)\] \[[Blog](/blog)\] \[[Google Scholar](https://scholar.google.com/citations?user=NvMHcs0AAAAJ)\] \[[X](https://x.com/lianghui_zhu)\]
 

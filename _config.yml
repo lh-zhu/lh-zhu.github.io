@@ -6,7 +6,7 @@
 name: Lianghui Zhu
 
 # Short bio or description (displayed in the header)
-description: 朱良辉
+description: 朱良辉 | Ph.D. at HUST
 
 # URL of your avatar or profile pic (you could use your GitHub profile pic)
 avatar: https://avatars.githubusercontent.com/u/27504120?s=400&u=4dae5e64d5ff15abef1ce9ce02eb739d0bd5654f&v=4
@@ -52,7 +52,7 @@ google_analytics: G-NXZ86DZP8K
 
 # Your website URL (e.g. http://barryclark.github.io or http://www.barryclark.co)
 # Used for Sitemap.xml and your RSS feed
-url: http://lh-zhu.github.io
+url: https://lh-zhu.github.io
 
 # If you're hosting your site at a Project repository on GitHub pages
 # (http://yourusername.github.io/repository-name)
@@ -84,9 +84,9 @@ sass:
   style: :expanded # You might prefer to minify using :compressed
 
 # Use the following plug-ins
-gems:
-  - jekyll-sitemap # Create a sitemap using the official Jekyll sitemap gem
-  - jekyll-feed # Create an Atom feed using the official Jekyll feed gem
+plugins:
+  - jekyll-sitemap
+  - jekyll-feed
 
 # Exclude these files from your production _site
 exclude:

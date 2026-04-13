@@ -1,7 +1,8 @@
 ---
 layout: page
-title: About
+title: Homepage
 permalink: /index.html
+excerpt: "Lianghui Zhu (朱良辉) is a Ph.D. candidate at HUST, specializing in foundation models and visual representation learning. Author of Vision Mamba (ICML 2024, Most Influential Paper) and JudgeLM (ICLR 2025 Spotlight)."
 ---
 
 <img style="float:right; padding-left:10px" src="https://avatars.githubusercontent.com/u/27504120?s=400&u=4dae5e64d5ff15abef1ce9ce02eb739d0bd5654f&v=4" width="220" height="220">

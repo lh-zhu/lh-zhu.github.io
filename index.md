@@ -63,8 +63,8 @@ Currently I am interning at **ByteDance Doubao Team**. Previously, I worked at V
     Rui Hu\*, Lianghui Zhu\*, Yuxuan Zhang, Tianheng Cheng, Longjin Liu, Hao Liu, Longjin Ran, Xiaoxin Chen, Wenyu Liu, Xinggang Wang <br>
     **ICCV 2025** · [Paper](https://arxiv.org/abs/2503.10596) & [Code](https://github.com/hustvl/GroundingSuite)
 
-- **WeakSAM: Exploring Classification Clues as SAM Prompts for Weakly-supervised Object Detection and Instance Segmentation** <br>
-    Lianghui Zhu\*, Junwei Zhou\*, Xinggang Wang <br>
+- **WeakSAM: Segment Anything Meets Weakly-supervised Instance-level Recognition** <br>
+    Lianghui Zhu\*, Junwei Zhou\*, Yan Liu, Xin Hao, Wenyu Liu, Xinggang Wang <br>
     **ACM MM 2024** · 28 citations · [Paper](https://arxiv.org/abs/2402.14812) & [Code](https://github.com/hustvl/WeakSAM)
 
 - **ViG: Linear-complexity Visual Sequence Learning with Gated Linear Attention** <br>

@@ -25,7 +25,7 @@ Currently I am interning at **ByteDance Seed VLM Team**. Previously, I worked at
 
 # Latest Posts
 
-- **[The Second Half of Model Architecture](/The-Second-Half-of-Model-Architecture/)** (Apr 2026) <br>
+- **[The Second Half of Model Architecture](/The-Second-Half-of-Model-Architecture/)** (Apr 2026) · [中文版 / Chinese version](https://mp.weixin.qq.com/s/Ynt7xQTg5wWAf64Szup4Gg) <br>
   *We spent a decade scaling computation inside layers. We forgot to scale communication between them. That's about to change.*
 
 

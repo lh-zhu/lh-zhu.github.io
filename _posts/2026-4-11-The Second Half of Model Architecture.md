@@ -5,6 +5,9 @@ title: The Second Half of Model Architecture
 
 **tldr: We spent a decade scaling computation inside layers. We forgot to scale communication between them. That's about to change.**
 
+> 中文版本请见 [量子位公众号](https://mp.weixin.qq.com/s/Ynt7xQTg5wWAf64Szup4Gg)。  
+> A Chinese version of this post is published on [QbitAI (WeChat)](https://mp.weixin.qq.com/s/Ynt7xQTg5wWAf64Szup4Gg).
+
 For a decade, the recipe for progress in deep learning has been remarkably consistent: scale everything. More parameters. More data. Longer context. And it worked. Loss went down, capabilities went up, and the scaling laws told us exactly how much more to invest.
 
 But not all scaling is created equal. Sequence length required genuine innovation, and got it: an entire ecosystem of mechanism research and systems engineering. Data scaled straightforwardly: more data, lower loss. Making models bigger, wider and deeper, seemed just as simple.

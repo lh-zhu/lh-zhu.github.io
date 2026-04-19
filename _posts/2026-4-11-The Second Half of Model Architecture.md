@@ -21,7 +21,7 @@ To see what the first half of model architecture got right, look at what scaled 
 Start with sequence length. Early Transformers handled hundreds of tokens. Getting to 128K+ required sustained creativity across multiple fronts: new attention patterns (sparse, linear, hybrid), systems engineering ([FlashAttention](https://arxiv.org/abs/2205.14135)), position encoding advances (RoPE scaling). Researchers and engineers built an entire ecosystem around this, continuously improving how tokens communicate. And the payoff went far beyond longer documents. Without this investment, the extended reasoning chains behind [O1](https://openai.com/index/learning-to-reason-with-llms/) and [R1](https://arxiv.org/abs/2501.12948) would be far more costly. That's what happens when you invest in how information *flows* along the sequence dimension.
 
 <figure>
-  <img src="/images/blogs/the_second_half_of_model_architecture/scaling_llm.pdf" alt="Scaling in the first half">
+  <img src="/images/blogs/the_second_half_of_model_architecture/scaling_llm.png" alt="Scaling in the first half">
   <figcaption>Parameters and data scale in modern LLMs.</figcaption>
 </figure>
 
@@ -40,7 +40,7 @@ The residual connection fixes this: each person also forwards the accumulated me
 But by person 152, you're hearing 152 voices at once: the original message plus 151 layers of additions, all blended into a single whisper. The original words are technically in there, but buried. If person 152 needs to know what person 3 specifically said, they have to strain to pick it out of the blend.
 
 <figure>
-  <img src="/images/blogs/the_second_half_of_model_architecture/add_whisper.pdf" alt="whisper game">
+  <img src="/images/blogs/the_second_half_of_model_architecture/add_whisper.png" alt="whisper game">
   <figcaption>In the voice-accumulating game of whisper, it remains difficult for those at the back of the line to pick something out of the blend.</figcaption>
 </figure>
 
@@ -72,7 +72,7 @@ I think this kind of category error is pervasive in architecture design. When so
 One that already solved this exact problem along the sequence dimension.
 
 <figure>
-  <img src="/images/blogs/the_second_half_of_model_architecture/seq_attn.pdf" alt="sequence attention">
+  <img src="/images/blogs/the_second_half_of_model_architecture/seq_attn.png" alt="sequence attention">
   <figcaption>Causal attention mechanisms aggregate information along the sequential dimension (horizontal).</figcaption>
 </figure>
 
@@ -82,21 +82,21 @@ One that already solved this exact problem along the sequence dimension.
 Once you see inter-layer communication as retrieval rather than accumulation, the natural answer is attention across depth. Several groups converged on this idea independently: Google's [DCA](https://arxiv.org/abs/2502.06785), Huawei's [MRLA](https://arxiv.org/abs/2302.03985), Hessian.AI's [Dreamer](https://arxiv.org/abs/2601.21582), Kimi's [AttnRes](https://arxiv.org/abs/2603.15031), each applying dot-product attention across layers. The convergence itself was a signal: the concept was right.
 
 <figure>
-  <img src="/images/blogs/the_second_half_of_model_architecture/depth_attn.pdf" alt="depth attention">
+  <img src="/images/blogs/the_second_half_of_model_architecture/depth_attn.png" alt="depth attention">
   <figcaption>Depth attention mechanisms aggregate information along the depth dimension (vertical).</figcaption>
 </figure>
 
 But concept and practice are different things. I'll be honest: the first time I ran depth attention with a naive implementation, the forward-backward pass took 44,924 ms! The idea was sound; the engineering reality was brutal. Modern GPUs are optimized for large, regular matrix multiplications, not thousands of tiny attention operations across depth. An algorithm that is cheap to compute can still be painfully slow to run.
 
 <figure>
-  <img src="/images/blogs/the_second_half_of_model_architecture/efficiency.pdf" alt="Flash Depth Attention benchmark">
+  <img src="/images/blogs/the_second_half_of_model_architecture/efficiency.png" alt="Flash Depth Attention benchmark">
   <figcaption>Depth attention with a naive implementation (DepthRef) is slow; Flash Depth Attention (FDA) is fast.</figcaption>
 </figure>
 
 Previous methods hit an impasse: simplify depth attention for speed (losing the selective retrieval that made it worthwhile), or keep full expressivity at impractical cost. We found a way through by not simplifying the algorithm, but designing a hardware-aware implementation for the computation. [Flash Depth Attention](https://github.com/hustvl/MoDA) made full-expressivity depth retrieval fast enough to train at scale.
 
 <figure>
-  <img src="/images/blogs/the_second_half_of_model_architecture/moda_pipeline.pdf" alt="MoDA pipeline">
+  <img src="/images/blogs/the_second_half_of_model_architecture/moda_pipeline.png" alt="MoDA pipeline">
   <figcaption>Mixture-of-depths attention (MoDA) mechanism aggregates information both along the sequence dimension (horizontal) and the depth dimension (vertical).</figcaption>
 </figure>
 
@@ -110,14 +110,14 @@ The conventional Transformer backbone pipeline is: residual connections -> seque
 Return to the whisper game. In the residual version, person 152 strains to hear person 3 through a chorus of accumulated voices. With depth retrieval, person 152 taps person 3 on the shoulder and asks directly: "What did you say?" No intermediaries. No accumulated noise. And the results confirmed what the analogy predicts: given the ability to selectively retrieve from specific layers through depth KV, the model consistently and actively chooses to do so. The attention sink phenomenon diminishes (attention sink is a longstanding puzzle for architecture researchers, where models dump probability mass onto a few fixed tokens). This is what happens when you invest in how information flows *between* layers, not just *within* them.
 
 <figure>
-  <img src="/images/blogs/the_second_half_of_model_architecture/moda_whisper.pdf" alt="MoDA whisper game">
+  <img src="/images/blogs/the_second_half_of_model_architecture/moda_whisper.png" alt="MoDA whisper game">
   <figcaption>After the flash depth attention (FDA) is introduced, the whisper game allows everyone to view the group chat history on their cell phones.</figcaption>
 </figure>
 
 **The first half of model architecture was about scaling components.** Longer sequences, more data, bigger models. The question was "how can we scale everything up?" It was the right question. It got us from GPT-2 to GPT-4. **The second half is about scaling communication.** The new question: **"how well do components communicate?"**
 
 <figure>
-  <img src="/images/blogs/the_second_half_of_model_architecture/moda_result.pdf" alt="MoDA result">
+  <img src="/images/blogs/the_second_half_of_model_architecture/moda_result.png" alt="MoDA result">
   <figcaption>After the mixture-of-depths attention (MoDA) is introduced, we comprehensively improve the capabilities on the mainstream open-source baseline (OLMo2).</figcaption>
 </figure>
 

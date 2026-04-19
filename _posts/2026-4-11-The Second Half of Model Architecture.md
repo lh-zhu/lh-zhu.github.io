@@ -21,8 +21,8 @@ To see what the first half of model architecture got right, look at what scaled 
 Start with sequence length. Early Transformers handled hundreds of tokens. Getting to 128K+ required sustained creativity across multiple fronts: new attention patterns (sparse, linear, hybrid), systems engineering ([FlashAttention](https://arxiv.org/abs/2205.14135)), position encoding advances (RoPE scaling). Researchers and engineers built an entire ecosystem around this, continuously improving how tokens communicate. And the payoff went far beyond longer documents. Without this investment, the extended reasoning chains behind [O1](https://openai.com/index/learning-to-reason-with-llms/) and [R1](https://arxiv.org/abs/2501.12948) would be far more costly. That's what happens when you invest in how information *flows* along the sequence dimension.
 
 <figure>
-  <img src="/images/blogs/the_second_half_of_model_architecture/scaling_first_half_v1p0.png" alt="Scaling in the first half">
-  <figcaption>Parameters and data scale in modern LLMs</figcaption>
+  <img src="/images/blogs/the_second_half_of_model_architecture/scaling_llm.pdf" alt="Scaling in the first half">
+  <figcaption>Parameters and data scale in modern LLMs.</figcaption>
 </figure>
 
 Parameters and data were the intuitive part. Since the earliest days of deep learning, every textbook teaches us the same recipe: more data, wider layers, deeper networks, better representations. From GPT-2's 1.5B to today's hundreds of billions, the recipe worked. No new mechanisms needed. Just more of the same.
@@ -33,11 +33,16 @@ Depth tells a different story. Models did get deeper: 32 layers, 64, even 100+. 
 
 The residual connection is arguably the single most important primitive in deep learning. Without it, no 100-layer Transformers, no modern LLMs, no scaling laws. But here's the thing about foundational solutions: sometimes they become so invisible that nobody questions whether they're still the right answer, or just the first one that worked.
 
-Think of it as a game of telephone, with a twist. In the standard game, person 1 whispers to person 2, who whispers to person 3. By person 18, the message is garbled. That's a vanilla deep network: each layer only sees the previous layer's output.
+Think of it as a game of whisper, with a twist. In the standard game, person 1 whispers to person 2, who whispers to person 3. By person 18, the message is garbled. That's a vanilla deep network: each layer only sees the previous layer's output.
 
 The residual connection fixes this: each person also forwards the accumulated message verbatim. Person 3 hears both person 2's new interpretation *and* everything before. The original signal is always preserved, as one voice in a growing chorus.
 
 But by person 152, you're hearing 152 voices at once: the original message plus 151 layers of additions, all blended into a single whisper. The original words are technically in there, but buried. If person 152 needs to know what person 3 specifically said, they have to strain to pick it out of the blend.
+
+<figure>
+  <img src="/images/blogs/the_second_half_of_model_architecture/add_whisper.pdf" alt="whisper game">
+  <figcaption>In the voice-accumulating game of whisper, it remains difficult for those at the back of the line to pick something out of the blend.</figcaption>
+</figure>
 
 Usually, they can't.
 
@@ -50,46 +55,71 @@ So, is there a better mechanism?
 
 ## The recipe
 
-Many researchers noticed the depth bottleneck before me. Over the years, the fixes grew progressively cleverer: [DenseNet](https://arxiv.org/abs/1608.06993) kept every layer's output, but at quadratic cost. Learnable weights ([DenseFormer](https://arxiv.org/abs/2402.02622), [LIMe](https://arxiv.org/abs/2502.09245)) made it cheaper, but froze the blend after training: the same recipe for every token, every context. [Hyper-Connections](https://arxiv.org/abs/2409.19606) widened the pipe to *n* channels with mixing matrices between them. More lanes on the highway, but information still flows layer-by-layer. No mechanism for layer 152 to reach back to layer 3.
+Many researchers noticed the depth bottleneck before me. Over the years, the fixes grew progressively cleverer: [DenseNet](https://arxiv.org/abs/1608.06993), the CVPR 2017 best paper, kept every layer's output, but at quadratic cost. Learnable weights ([DenseFormer](https://arxiv.org/abs/2402.02622), [LIMe](https://arxiv.org/abs/2502.09245)) made it cheaper, but froze the blend after training: the same recipe for every token, every context. ByteDance's [Hyper-Connections](https://arxiv.org/abs/2409.19606) and DeepSeek's [mHC](https://arxiv.org/abs/2512.24880) widened the pipe to *n* channels with mixing matrices between them. More lanes on the highway, but information still flows layer-by-layer. No mechanism for layer 152 to reach back to layer 3.
 
-[MUDDFormer](https://arxiv.org/abs/2502.12170) made the mixing dynamic, generating weights conditioned on each token's hidden state. This gets something fundamentally right: how much you draw from each layer should depend on what you're processing. But layer 152 decides how much to draw from layer 3 based on its own state alone, without knowing what layer 3 actually contains. It's predicting which layers are useful, not checking.
+ColorfulClouds' [MUDDFormer](https://arxiv.org/abs/2502.12170) made the mixing dynamic, generating weights conditioned on each token's hidden state. This gets something fundamentally right: how much you draw from each layer should depend on what you're processing. But layer 152 decides how much to draw from layer 3 based on its own state alone, without knowing what layer 3 actually contains. It's predicting which layers are useful, not checking.
 
-Each step fixed a real limitation. None questioned the frame.
+Each step fixed a real limitation. None questioned the depth-residual frame itself.
 
-It took me a while to see what these approaches had in common. Every one of them, from DenseNet to Hyper-Connections, answers the same implicit question: "how do we better *blend* layer outputs?" Better coefficients, more channels, adaptive weights. Always blending. Always accumulation. [ELMo](https://arxiv.org/abs/1802.05365) had shown early on that different layers encode genuinely different information: syntax in shallow layers, semantics in deep ones. The conclusion everyone drew was "learn better blending weights." But there is an alternative that the mainstream largely overlooked: if different layers hold different information, maybe each layer should be able to *retrieve* from whichever earlier layer holds what it needs, based on content, not position.
+It took me a while to see what these approaches had in common. Every one of them, from DenseNet to Hyper-Connections, answers the same implicit question: "how do we better *blend* layer outputs?" Better coefficients, more channels, adaptive weights. Always blending. Always accumulation. AI2's [ELMo](https://arxiv.org/abs/1802.05365) had shown early on that different layers encode genuinely different information: syntax in shallow layers, semantics in deep ones. The conclusion everyone drew was "learn better blending weights to balance syntax and semantics." But there is an alternative that the mainstream largely overlooked: if different layers hold different information, maybe each layer should be able to *retrieve* from whichever earlier layer holds what it needs, based on content, not position.
 
 This is the **category error**: treating inter-layer communication as **accumulation** (combining signals with learned or generated coefficients) rather than **retrieval** (selecting information through content-based matching). In the accumulation frame, even dynamic methods generate blend weights from the current layer alone, without consulting what each source actually contains. In the retrieval frame, the query encodes what is needed, the key encodes what is available, and their comparison determines relevance. Both sides get a voice.
 
-Back to the telephone game. Every prior method tried to produce a cleaner chorus: better enunciation, more relay channels, adaptive volume. None questioned the fundamental constraint that all voices accumulate into a single sound. None asked: what if you could simply walk back and talk to any person directly?
+Back to the whisper game. Every prior method tried to produce a cleaner chorus: better enunciation, more relay channels, adaptive volume. None questioned the fundamental constraint that all voices accumulate into a single sound. None asked: what if you could simply walk back and talk to any person directly?
 
 I think this kind of category error is pervasive in architecture design. When something works well enough, you don't question its conceptual frame. You improve within it. It took years of increasingly creative workarounds to see that the depth residual did not need better coefficients. It needed to be replaced by a fundamentally different operation.
 
 One that already solved this exact problem along the sequence dimension.
 
+<figure>
+  <img src="/images/blogs/the_second_half_of_model_architecture/seq_attn.pdf" alt="sequence attention">
+  <figcaption>Causal attention mechanisms aggregate information along the sequential dimension (horizontal).</figcaption>
+</figure>
+
 
 ## The second half
 
-Once you see inter-layer communication as retrieval rather than accumulation, the natural answer is attention across depth. Several groups converged on this idea independently: [DCA](https://arxiv.org/abs/2502.06785), [MRLA](https://arxiv.org/abs/2302.03985), [Dreamer](https://arxiv.org/abs/2601.21582), [AttnRes](https://arxiv.org/abs/2603.15031), each applying dot-product attention across layers. The convergence itself was a signal: the concept was right.
-
-But concept and practice are different things. I'll be honest: the first time I ran depth attention with a naive implementation, the forward-backward pass took 44,924 ms. The idea was sound; the engineering reality was brutal. Modern GPUs are optimized for large, regular matrix multiplications, not thousands of tiny attention operations across depth. An algorithm that is cheap to compute can still be painfully slow to run.
+Once you see inter-layer communication as retrieval rather than accumulation, the natural answer is attention across depth. Several groups converged on this idea independently: Google's [DCA](https://arxiv.org/abs/2502.06785), Huawei's [MRLA](https://arxiv.org/abs/2302.03985), Hessian.AI's [Dreamer](https://arxiv.org/abs/2601.21582), Kimi's [AttnRes](https://arxiv.org/abs/2603.15031), each applying dot-product attention across layers. The convergence itself was a signal: the concept was right.
 
 <figure>
-  <img src="/images/blogs/the_second_half_of_model_architecture/fda_v1p0.png" alt="Flash Depth Attention benchmark">
+  <img src="/images/blogs/the_second_half_of_model_architecture/depth_attn.pdf" alt="depth attention">
+  <figcaption>Depth attention mechanisms aggregate information along the depth dimension (vertical).</figcaption>
+</figure>
+
+But concept and practice are different things. I'll be honest: the first time I ran depth attention with a naive implementation, the forward-backward pass took 44,924 ms! The idea was sound; the engineering reality was brutal. Modern GPUs are optimized for large, regular matrix multiplications, not thousands of tiny attention operations across depth. An algorithm that is cheap to compute can still be painfully slow to run.
+
+<figure>
+  <img src="/images/blogs/the_second_half_of_model_architecture/efficiency.pdf" alt="Flash Depth Attention benchmark">
   <figcaption>Depth attention with a naive implementation (DepthRef) is slow; Flash Depth Attention (FDA) is fast.</figcaption>
 </figure>
 
-Previous methods hit an impasse: simplify depth attention for speed (losing the selective retrieval that made it worthwhile), or keep full expressivity at impractical cost. We found a way through by not simplifying the algorithm, but reorganizing the computation to fit GPU hardware. [Flash Depth Attention](https://github.com/hustvl/MoDA) made full-expressivity depth retrieval fast enough to train at scale.
+Previous methods hit an impasse: simplify depth attention for speed (losing the selective retrieval that made it worthwhile), or keep full expressivity at impractical cost. We found a way through by not simplifying the algorithm, but designing a hardware-aware implementation for the computation. [Flash Depth Attention](https://github.com/hustvl/MoDA) made full-expressivity depth retrieval fast enough to train at scale.
 
-With efficient depth retrieval in hand, we noticed that the main pipeline of each layer had become: depth attention, sequence attention, depth attention, FFN. Three attention operations over different KV sets, sharing the same query. The natural move was to fuse them. [Mixture-of-depths attention (MoDA)](https://arxiv.org/abs/2603.15619) merges depth and sequence retrieval into one unified softmax. Each head jointly attends to the current layer's sequence KV pairs and depth KV pairs from all preceding layers. Under one softmax, the model freely decides when to look across sequence tokens and when to look across layers. One operation, two dimensions of retrieval.
+<figure>
+  <img src="/images/blogs/the_second_half_of_model_architecture/moda_pipeline.pdf" alt="MoDA pipeline">
+  <figcaption>Mixture-of-depths attention (MoDA) mechanism aggregates information both along the sequence dimension (horizontal) and the depth dimension (vertical).</figcaption>
+</figure>
+
+The conventional Transformer backbone pipeline is: residual connections -> sequential attention -> residual connections -> FFN (feed-forward network). With efficient depth retrieval in hand, we noticed that the main pipeline of each layer had become: depth attention -> sequence attention -> depth attention -> FFN. Three attention operations over different KV sets, sharing almost the same query. The natural move was to fuse them. [Mixture-of-depths attention (MoDA)](https://arxiv.org/abs/2603.15619) merges depth and sequence retrieval into one unified softmax. Each head jointly attends to the current layer's sequence KV pairs and depth KV pairs from all preceding layers. Under one softmax, the model freely decides when to look across sequence tokens and when to look across layers. One operation, two dimensions of retrieval.
 
 <figure>
   <img src="/images/blogs/the_second_half_of_model_architecture/moda_attn_vis_v1p0.png" alt="MoDA Attention Visualization">
   <figcaption>Left area is sequence KV, right area is depth KV. The more yellow the color, the more attention.</figcaption>
 </figure>
 
-Return to the telephone game. In the residual version, person 152 strains to hear person 3 through a chorus of accumulated voices. With depth retrieval, person 152 taps person 3 on the shoulder and asks directly: "What did you say?" No intermediaries. No accumulated noise. And the results confirmed what the analogy predicts: given the ability to selectively retrieve from specific layers through depth KV, the model consistently and actively chooses to do so. The attention sink phenomenon, where models dump probability mass onto a few fixed tokens, diminishes. This is what happens when you invest in how information flows *between* layers, not just *within* them.
+Return to the whisper game. In the residual version, person 152 strains to hear person 3 through a chorus of accumulated voices. With depth retrieval, person 152 taps person 3 on the shoulder and asks directly: "What did you say?" No intermediaries. No accumulated noise. And the results confirmed what the analogy predicts: given the ability to selectively retrieve from specific layers through depth KV, the model consistently and actively chooses to do so. The attention sink phenomenon diminishes (attention sink is a longstanding puzzle for architecture researchers, where models dump probability mass onto a few fixed tokens). This is what happens when you invest in how information flows *between* layers, not just *within* them.
+
+<figure>
+  <img src="/images/blogs/the_second_half_of_model_architecture/moda_whisper.pdf" alt="MoDA whisper game">
+  <figcaption>After the flash depth attention (FDA) is introduced, the whisper game allows everyone to view the group chat history on their cell phones.</figcaption>
+</figure>
 
 **The first half of model architecture was about scaling components.** Longer sequences, more data, bigger models. The question was "how can we scale everything up?" It was the right question. It got us from GPT-2 to GPT-4. **The second half is about scaling communication.** The new question: **"how well do components communicate?"**
+
+<figure>
+  <img src="/images/blogs/the_second_half_of_model_architecture/moda_result.pdf" alt="MoDA result">
+  <figcaption>After the mixture-of-depths attention (MoDA) is introduced, we comprehensively improve the capabilities on the mainstream open-source baseline (OLMo2).</figcaption>
+</figure>
 
 Depth is the most glaring case because the gap between what exists (additive accumulation) and what is possible (selective retrieval) is enormous. And I believe the principle generalizes. Wherever neural networks use static, data-independent channels to move information, between layers, between modalities, between time steps, there's likely a retrieval mechanism waiting to replace the accumulation.
 
